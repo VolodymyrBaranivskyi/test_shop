@@ -8,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
@@ -16,7 +17,8 @@ import static java.util.Objects.isNull;
 
 
 @Repository
-public class ProductDaoImpl /*extends AbstractDaoImpl*/ implements ProductDao {
+@Transactional
+public class ProductDaoImpl implements ProductDao {
 
     @Autowired
     private SessionFactory sessionFactory;
@@ -30,6 +32,12 @@ public class ProductDaoImpl /*extends AbstractDaoImpl*/ implements ProductDao {
         Session session = this.sessionFactory.getCurrentSession();
         return session.createCriteria(Products.class, "shop_eva.products")
                 .list();
+    }
+
+    @Override
+    public Products save(Products product) {
+        Session session = this.sessionFactory.getCurrentSession();
+        return (Products) session.merge(product);
     }
 
     public List<Products> getAllAvailable(PageRequest pageRequest) {

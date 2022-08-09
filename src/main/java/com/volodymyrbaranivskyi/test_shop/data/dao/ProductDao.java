@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ProductDao {
     List<Products> getAll(String regex);
+    Products save(Products product);
 }
